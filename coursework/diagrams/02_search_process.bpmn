@@ -1,0 +1,540 @@
+<?xml version='1.0' encoding='utf-8'?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Definitions_Search" targetNamespace="https://example.org/shawarma/requirements">
+  <bpmn:collaboration id="Collaboration_Search">
+    <bpmn:participant id="PoolUser" name="Посетитель" processRef="Process_User" />
+    <bpmn:participant id="PoolSystem" name="Агрегатор" processRef="Process_System" />
+    <bpmn:participant id="PoolMaps" name="Картографический сервис" />
+    <bpmn:messageFlow id="M1" name="Поиск" sourceRef="USearch" targetRef="SSearchStart" />
+    <bpmn:messageFlow id="M2" name="Результат" sourceRef="SReply" targetRef="UResults" />
+    <bpmn:messageFlow id="M3" name="Карточка" sourceRef="UChoose" targetRef="SCardStart" />
+    <bpmn:messageFlow id="M4" name="Ответ" sourceRef="SCardReply" targetRef="UCard" />
+    <bpmn:messageFlow id="M5" name="Маршрут" sourceRef="URouteReq" targetRef="SRouteStart" />
+    <bpmn:messageFlow id="M6" name="Результат" sourceRef="SRouteReply" targetRef="URoute" />
+    <bpmn:messageFlow id="M7" name="Адрес → координаты" sourceRef="SSearch" targetRef="PoolMaps" />
+    <bpmn:messageFlow id="M8" name="Координаты / отказ" sourceRef="PoolMaps" targetRef="SSearch" />
+    <bpmn:messageFlow id="M9" name="Точки → маршрут" sourceRef="SRoute" targetRef="PoolMaps" />
+    <bpmn:messageFlow id="M10" name="Маршрут / отказ" sourceRef="PoolMaps" targetRef="SRoute" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_User" isExecutable="false">
+    <bpmn:startEvent id="UStart" name="Выбор">
+      <bpmn:outgoing>F1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="USearch" name="Задать точку и фильтры; отправить запрос">
+      <bpmn:incoming>F1</bpmn:incoming>
+      <bpmn:outgoing>F2</bpmn:outgoing>
+      <bpmn:incoming>F6</bpmn:incoming>
+    </bpmn:userTask>
+    <bpmn:intermediateCatchEvent id="UResults" name="Ответ поиска">
+      <bpmn:incoming>F2</bpmn:incoming>
+      <bpmn:outgoing>F3</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="UResults_MessageDefinition" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:exclusiveGateway id="UFound" name="Получен список точек?" gatewayDirection="Diverging">
+      <bpmn:incoming>F3</bpmn:incoming>
+      <bpmn:outgoing>F4</bpmn:outgoing>
+      <bpmn:outgoing>F5</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="UChoose" name="Выбрать заведение; запросить карточку">
+      <bpmn:incoming>F4</bpmn:incoming>
+      <bpmn:outgoing>F8</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:intermediateCatchEvent id="UCard" name="Ответ карточки">
+      <bpmn:incoming>F8</bpmn:incoming>
+      <bpmn:outgoing>F9</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="UCard_MessageDefinition" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:exclusiveGateway id="UCardOK" name="Карточка доступна?" gatewayDirection="Diverging">
+      <bpmn:incoming>F9</bpmn:incoming>
+      <bpmn:outgoing>F10</bpmn:outgoing>
+      <bpmn:outgoing>F11</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="URouteNeeded" name="Нужен маршрут?" gatewayDirection="Diverging">
+      <bpmn:incoming>F10</bpmn:incoming>
+      <bpmn:outgoing>F12</bpmn:outgoing>
+      <bpmn:outgoing>F13</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="URouteReq" name="Запросить маршрут от точки поиска">
+      <bpmn:incoming>F12</bpmn:incoming>
+      <bpmn:outgoing>F14</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:intermediateCatchEvent id="URoute" name="Маршрут или причина отказа">
+      <bpmn:incoming>F14</bpmn:incoming>
+      <bpmn:outgoing>F15</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="URoute_MessageDefinition" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:exclusiveGateway id="UMerge" name="" gatewayDirection="Converging">
+      <bpmn:incoming>F13</bpmn:incoming>
+      <bpmn:incoming>F15</bpmn:incoming>
+      <bpmn:outgoing>F16</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="UEnd" name="Заведение выбрано, адрес получен">
+      <bpmn:incoming>F16</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="URetry" name="Продолжить поиск?" gatewayDirection="Mixed">
+      <bpmn:incoming>F5</bpmn:incoming>
+      <bpmn:outgoing>F6</bpmn:outgoing>
+      <bpmn:outgoing>F7</bpmn:outgoing>
+      <bpmn:incoming>F11</bpmn:incoming>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="UCancel" name="Поиск прекращён">
+      <bpmn:incoming>F7</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="F1" sourceRef="UStart" targetRef="USearch" />
+    <bpmn:sequenceFlow id="F2" sourceRef="USearch" targetRef="UResults" />
+    <bpmn:sequenceFlow id="F3" sourceRef="UResults" targetRef="UFound" />
+    <bpmn:sequenceFlow id="F4" sourceRef="UFound" targetRef="UChoose" name="Да">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Да</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F5" sourceRef="UFound" targetRef="URetry" name="Нет / ошибка">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Нет / ошибка</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F6" sourceRef="URetry" targetRef="USearch" name="Да">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Да</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F7" sourceRef="URetry" targetRef="UCancel" name="Нет">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Нет</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F8" sourceRef="UChoose" targetRef="UCard" />
+    <bpmn:sequenceFlow id="F9" sourceRef="UCard" targetRef="UCardOK" />
+    <bpmn:sequenceFlow id="F10" sourceRef="UCardOK" targetRef="URouteNeeded" name="Да">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Да</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F11" sourceRef="UCardOK" targetRef="URetry" name="Нет">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Нет</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F12" sourceRef="URouteNeeded" targetRef="URouteReq" name="Да">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Да</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F13" sourceRef="URouteNeeded" targetRef="UMerge" name="Нет">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Нет</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F14" sourceRef="URouteReq" targetRef="URoute" />
+    <bpmn:sequenceFlow id="F15" sourceRef="URoute" targetRef="UMerge" />
+    <bpmn:sequenceFlow id="F16" sourceRef="UMerge" targetRef="UEnd" />
+  </bpmn:process>
+  <bpmn:process id="Process_System" isExecutable="false">
+    <bpmn:laneSet id="LaneSet_System">
+      <bpmn:lane id="LaneAuto" name="Автоматическая обработка">
+        <bpmn:flowNodeRef>SSearchStart</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SSearch</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SReply</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SSearchEnd</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SCardStart</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SCard</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SCardReply</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SCardEnd</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SRouteStart</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SRoute</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SRouteReply</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>SRouteEnd</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+    <bpmn:startEvent id="SSearchStart" name="Запрос поиска">
+      <bpmn:outgoing>F17</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="SSearchStart_MessageDefinition" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="SSearch" name="Проверить запрос; определить точку; найти заведения">
+      <bpmn:incoming>F17</bpmn:incoming>
+      <bpmn:outgoing>F18</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sendTask id="SReply" name="Отправить список, пустой результат или ошибку">
+      <bpmn:incoming>F18</bpmn:incoming>
+      <bpmn:outgoing>F19</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="SSearchEnd" name="">
+      <bpmn:incoming>F19</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="SCardStart" name="Запрос карточки">
+      <bpmn:outgoing>F20</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="SCardStart_MessageDefinition" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="SCard" name="Проверить точку; подготовить карточку или объяснение">
+      <bpmn:incoming>F20</bpmn:incoming>
+      <bpmn:outgoing>F21</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sendTask id="SCardReply" name="Отправить ответ на запрос карточки">
+      <bpmn:incoming>F21</bpmn:incoming>
+      <bpmn:outgoing>F22</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="SCardEnd" name="">
+      <bpmn:incoming>F22</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="SRouteStart" name="Запрос маршрута">
+      <bpmn:outgoing>F23</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="SRouteStart_MessageDefinition" />
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="SRoute" name="Проверить точки; получить маршрут или причину отказа">
+      <bpmn:incoming>F23</bpmn:incoming>
+      <bpmn:outgoing>F24</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sendTask id="SRouteReply" name="Отправить маршрут или объяснение недоступности">
+      <bpmn:incoming>F24</bpmn:incoming>
+      <bpmn:outgoing>F25</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:endEvent id="SRouteEnd" name="">
+      <bpmn:incoming>F25</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="F17" sourceRef="SSearchStart" targetRef="SSearch" />
+    <bpmn:sequenceFlow id="F18" sourceRef="SSearch" targetRef="SReply" />
+    <bpmn:sequenceFlow id="F19" sourceRef="SReply" targetRef="SSearchEnd" />
+    <bpmn:sequenceFlow id="F20" sourceRef="SCardStart" targetRef="SCard" />
+    <bpmn:sequenceFlow id="F21" sourceRef="SCard" targetRef="SCardReply" />
+    <bpmn:sequenceFlow id="F22" sourceRef="SCardReply" targetRef="SCardEnd" />
+    <bpmn:sequenceFlow id="F23" sourceRef="SRouteStart" targetRef="SRoute" />
+    <bpmn:sequenceFlow id="F24" sourceRef="SRoute" targetRef="SRouteReply" />
+    <bpmn:sequenceFlow id="F25" sourceRef="SRouteReply" targetRef="SRouteEnd" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_Search">
+    <bpmndi:BPMNPlane id="BPMNPlane_Search" bpmnElement="Collaboration_Search">
+      <bpmndi:BPMNShape id="PoolUser_di" bpmnElement="PoolUser" isHorizontal="true">
+        <dc:Bounds x="50" y="120" width="2090" height="390" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="PoolSystem_di" bpmnElement="PoolSystem" isHorizontal="true">
+        <dc:Bounds x="50" y="600" width="2090" height="195" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="LaneAuto_di" bpmnElement="LaneAuto" isHorizontal="true">
+        <dc:Bounds x="92" y="600" width="2048" height="195" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="PoolMaps_di" bpmnElement="PoolMaps" isHorizontal="true">
+        <dc:Bounds x="50" y="880" width="2090" height="95" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UStart_di" bpmnElement="UStart">
+        <dc:Bounds x="100" y="205" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="53.0" y="247" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="USearch_di" bpmnElement="USearch">
+        <dc:Bounds x="170" y="190" width="170" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UResults_di" bpmnElement="UResults">
+        <dc:Bounds x="400" y="207" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="353.0" y="249" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UFound_di" bpmnElement="UFound">
+        <dc:Bounds x="490" y="200" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="450.0" y="140" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UChoose_di" bpmnElement="UChoose">
+        <dc:Bounds x="610" y="190" width="170" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UCard_di" bpmnElement="UCard">
+        <dc:Bounds x="840" y="207" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="793.0" y="249" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UCardOK_di" bpmnElement="UCardOK">
+        <dc:Bounds x="930" y="200" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="890.0" y="140" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="URouteNeeded_di" bpmnElement="URouteNeeded">
+        <dc:Bounds x="1070" y="200" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1030.0" y="262" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="URouteReq_di" bpmnElement="URouteReq">
+        <dc:Bounds x="1220" y="190" width="170" height="70" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="URoute_di" bpmnElement="URoute">
+        <dc:Bounds x="1700" y="207" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1653.0" y="249" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UMerge_di" bpmnElement="UMerge">
+        <dc:Bounds x="1850" y="200" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UEnd_di" bpmnElement="UEnd">
+        <dc:Bounds x="1970" y="207" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1923.0" y="249" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="URetry_di" bpmnElement="URetry">
+        <dc:Bounds x="490" y="365" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="330.0" y="333" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="UCancel_di" bpmnElement="UCancel">
+        <dc:Bounds x="650" y="372" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="603.0" y="414" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SSearchStart_di" bpmnElement="SSearchStart">
+        <dc:Bounds x="180" y="660" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="133.0" y="702" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SSearch_di" bpmnElement="SSearch">
+        <dc:Bounds x="260" y="640" width="180" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SReply_di" bpmnElement="SReply">
+        <dc:Bounds x="485" y="640" width="160" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SSearchEnd_di" bpmnElement="SSearchEnd">
+        <dc:Bounds x="690" y="660" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SCardStart_di" bpmnElement="SCardStart">
+        <dc:Bounds x="795" y="660" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="748.0" y="702" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SCard_di" bpmnElement="SCard">
+        <dc:Bounds x="875" y="640" width="160" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SCardReply_di" bpmnElement="SCardReply">
+        <dc:Bounds x="1080" y="640" width="160" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SCardEnd_di" bpmnElement="SCardEnd">
+        <dc:Bounds x="1280" y="660" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SRouteStart_di" bpmnElement="SRouteStart">
+        <dc:Bounds x="1410" y="660" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1363.0" y="702" width="130" height="45" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SRoute_di" bpmnElement="SRoute">
+        <dc:Bounds x="1490" y="640" width="160" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SRouteReply_di" bpmnElement="SRouteReply">
+        <dc:Bounds x="1695" y="640" width="160" height="76" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="SRouteEnd_di" bpmnElement="SRouteEnd">
+        <dc:Bounds x="1900" y="660" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="F1_di" bpmnElement="F1">
+        <di:waypoint x="136" y="223" />
+        <di:waypoint x="170" y="223" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F2_di" bpmnElement="F2">
+        <di:waypoint x="340" y="225" />
+        <di:waypoint x="400" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F3_di" bpmnElement="F3">
+        <di:waypoint x="436" y="225" />
+        <di:waypoint x="490" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F4_di" bpmnElement="F4">
+        <di:waypoint x="540" y="225" />
+        <di:waypoint x="610" y="225" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="510.0" y="197.0" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F5_di" bpmnElement="F5">
+        <di:waypoint x="515" y="250" />
+        <di:waypoint x="515" y="365" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="520" y="290" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F6_di" bpmnElement="F6">
+        <di:waypoint x="490" y="390" />
+        <di:waypoint x="255" y="390" />
+        <di:waypoint x="255" y="260" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="310" y="360" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F7_di" bpmnElement="F7">
+        <di:waypoint x="540" y="390" />
+        <di:waypoint x="650" y="390" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="530.0" y="362.0" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F8_di" bpmnElement="F8">
+        <di:waypoint x="780" y="225" />
+        <di:waypoint x="840" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F9_di" bpmnElement="F9">
+        <di:waypoint x="876" y="225" />
+        <di:waypoint x="930" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F10_di" bpmnElement="F10">
+        <di:waypoint x="980" y="225" />
+        <di:waypoint x="1070" y="225" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="960.0" y="197.0" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F11_di" bpmnElement="F11">
+        <di:waypoint x="955" y="250" />
+        <di:waypoint x="955" y="450" />
+        <di:waypoint x="565" y="450" />
+        <di:waypoint x="565" y="390" />
+        <di:waypoint x="540" y="390" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="765" y="420" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F12_di" bpmnElement="F12">
+        <di:waypoint x="1120" y="225" />
+        <di:waypoint x="1220" y="225" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1105.0" y="197.0" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F13_di" bpmnElement="F13">
+        <di:waypoint x="1095" y="200" />
+        <di:waypoint x="1095" y="155" />
+        <di:waypoint x="1875" y="155" />
+        <di:waypoint x="1875" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1405" y="128" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F14_di" bpmnElement="F14">
+        <di:waypoint x="1390" y="225" />
+        <di:waypoint x="1700" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F15_di" bpmnElement="F15">
+        <di:waypoint x="1736" y="225" />
+        <di:waypoint x="1850" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F16_di" bpmnElement="F16">
+        <di:waypoint x="1900" y="225" />
+        <di:waypoint x="1970" y="225" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F17_di" bpmnElement="F17">
+        <di:waypoint x="216" y="678" />
+        <di:waypoint x="260" y="678" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F18_di" bpmnElement="F18">
+        <di:waypoint x="440" y="678" />
+        <di:waypoint x="485" y="678" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F19_di" bpmnElement="F19">
+        <di:waypoint x="645" y="678" />
+        <di:waypoint x="690" y="678" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F20_di" bpmnElement="F20">
+        <di:waypoint x="831" y="678" />
+        <di:waypoint x="875" y="678" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F21_di" bpmnElement="F21">
+        <di:waypoint x="1035" y="678" />
+        <di:waypoint x="1080" y="678" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F22_di" bpmnElement="F22">
+        <di:waypoint x="1240" y="678" />
+        <di:waypoint x="1280" y="678" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F23_di" bpmnElement="F23">
+        <di:waypoint x="1446" y="678" />
+        <di:waypoint x="1490" y="678" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F24_di" bpmnElement="F24">
+        <di:waypoint x="1650" y="678" />
+        <di:waypoint x="1695" y="678" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F25_di" bpmnElement="F25">
+        <di:waypoint x="1855" y="678" />
+        <di:waypoint x="1900" y="678" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M1_di" bpmnElement="M1">
+        <di:waypoint x="240" y="260" />
+        <di:waypoint x="240" y="545" />
+        <di:waypoint x="198" y="545" />
+        <di:waypoint x="198" y="660" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="115" y="510" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M2_di" bpmnElement="M2">
+        <di:waypoint x="560" y="640" />
+        <di:waypoint x="560" y="575" />
+        <di:waypoint x="418" y="575" />
+        <di:waypoint x="418" y="243" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="395" y="540" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M3_di" bpmnElement="M3">
+        <di:waypoint x="695" y="260" />
+        <di:waypoint x="695" y="535" />
+        <di:waypoint x="813" y="535" />
+        <di:waypoint x="813" y="660" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="685" y="500" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M4_di" bpmnElement="M4">
+        <di:waypoint x="1160" y="640" />
+        <di:waypoint x="1160" y="565" />
+        <di:waypoint x="858" y="565" />
+        <di:waypoint x="858" y="243" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="965" y="530" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M5_di" bpmnElement="M5">
+        <di:waypoint x="1305" y="260" />
+        <di:waypoint x="1305" y="535" />
+        <di:waypoint x="1428" y="535" />
+        <di:waypoint x="1428" y="660" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1295" y="500" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M6_di" bpmnElement="M6">
+        <di:waypoint x="1775" y="640" />
+        <di:waypoint x="1775" y="560" />
+        <di:waypoint x="1718" y="560" />
+        <di:waypoint x="1718" y="243" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1740" y="525" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M7_di" bpmnElement="M7">
+        <di:waypoint x="305" y="716" />
+        <di:waypoint x="305" y="840" />
+        <di:waypoint x="350" y="840" />
+        <di:waypoint x="350" y="880" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="195" y="805" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M8_di" bpmnElement="M8">
+        <di:waypoint x="425" y="880" />
+        <di:waypoint x="425" y="815" />
+        <di:waypoint x="390" y="815" />
+        <di:waypoint x="390" y="716" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="410" y="785" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M9_di" bpmnElement="M9">
+        <di:waypoint x="1520" y="716" />
+        <di:waypoint x="1520" y="835" />
+        <di:waypoint x="1510" y="835" />
+        <di:waypoint x="1510" y="880" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1370" y="805" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="M10_di" bpmnElement="M10">
+        <di:waypoint x="1620" y="880" />
+        <di:waypoint x="1620" y="815" />
+        <di:waypoint x="1610" y="815" />
+        <di:waypoint x="1610" y="716" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1655" y="785" width="130" height="30" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
