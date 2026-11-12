@@ -1,0 +1,281 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0">
+  <diagram name="BPMN_Backend_Detailed" id="bpmn-detailed">
+    <mxGraphModel dx="4650" dy="2080" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="PoolUser" parent="1" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=40;fillColor=#f5f5f5;fontStyle=1;fontSize=14;" value="Пользователь (Гость / Житель)" vertex="1">
+          <mxGeometry height="220" width="1600" x="-250" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="UserStart" parent="PoolUser" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#d5e8d4;strokeColor=#82b366;" value="Открывает приложение" vertex="1">
+          <mxGeometry height="78" width="78" x="50" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="UserTask1" parent="PoolUser" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" value="Вводит адрес /&#xa;берет геопозицию" vertex="1">
+          <mxGeometry height="60" width="120" x="190" y="59" as="geometry" />
+        </mxCell>
+        <mxCell id="UserTask2" parent="PoolUser" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" value="Применяет фильтры&#xa;(радиус, рейтинг)" vertex="1">
+          <mxGeometry height="60" width="120" x="440" y="59" as="geometry" />
+        </mxCell>
+        <mxCell id="UserTask3" parent="PoolUser" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" value="Выбирает заведение&#xa;из списка" vertex="1">
+          <mxGeometry height="60" width="120" x="740" y="59" as="geometry" />
+        </mxCell>
+        <mxCell id="UserTask4" parent="PoolUser" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#000000;" value="Нажимает&#xa;&quot;Построить маршрут&quot;" vertex="1">
+          <mxGeometry height="60" width="120" x="1050" y="59" as="geometry" />
+        </mxCell>
+        <mxCell id="UserEnd" parent="PoolUser" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=3;" value="Идет в заведение" vertex="1">
+          <mxGeometry height="80" width="80" x="1380" y="49" as="geometry" />
+        </mxCell>
+        <mxCell id="F_User1" edge="1" parent="PoolUser" source="UserStart" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="UserTask1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_User2" edge="1" parent="PoolUser" source="UserTask1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="UserTask2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_User3" edge="1" parent="PoolUser" source="UserTask2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="UserTask3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_User4" edge="1" parent="PoolUser" source="UserTask3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="UserTask4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_User5" edge="1" parent="PoolUser" source="UserTask4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="UserEnd">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PoolFrontend" parent="1" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=40;fillColor=#f5f5f5;fontStyle=1;fontSize=14;" value="Система: Фронтенд (Web/Mobile)" vertex="1">
+          <mxGeometry height="190" width="1600" x="-250" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="FEStart" parent="PoolFrontend" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Запрос сформирован" vertex="1">
+          <mxGeometry height="78" width="78" x="50" y="42" as="geometry" />
+        </mxCell>
+        <mxCell id="FETask1" parent="PoolFrontend" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Валидация ввода и&#xa;отправка REST API" vertex="1">
+          <mxGeometry height="60" width="120" x="440" y="51" as="geometry" />
+        </mxCell>
+        <mxCell id="FETask2" parent="PoolFrontend" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Рендер списка и&#xa;маркеров на карте" vertex="1">
+          <mxGeometry height="60" width="120" x="740" y="51" as="geometry" />
+        </mxCell>
+        <mxCell id="FETask3" parent="PoolFrontend" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Инициализация&#xa;виджета карт (SDK)" vertex="1">
+          <mxGeometry height="60" width="120" x="1040" y="51" as="geometry" />
+        </mxCell>
+        <mxCell id="F_FE1" edge="1" parent="PoolFrontend" source="FEStart" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="FETask1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="190" y="60" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="F_FE2" edge="1" parent="PoolFrontend" source="FETask1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="FETask2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_FE3" edge="1" parent="PoolFrontend" source="FETask2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="FETask3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="PoolGateway" parent="1" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=40;fillColor=#f5f5f5;fontStyle=1;fontSize=14;" value="Бэкенд: API Gateway" vertex="1">
+          <mxGeometry height="180" width="1600" x="-250" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="GWStart" parent="PoolGateway" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="HTTP Запрос" vertex="1">
+          <mxGeometry height="80" width="80" x="50" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="GWTask1" parent="PoolGateway" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Аутентификация &amp;&#xa;Rate Limiting" vertex="1">
+          <mxGeometry height="60" width="120" x="540" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="GWRouter" parent="PoolGateway" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Роутинг запросов" vertex="1">
+          <mxGeometry height="70" width="80" x="790" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GWTaskMaps" parent="PoolGateway" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Проксирование&#xa;к картам" vertex="1">
+          <mxGeometry height="60" width="120" x="1040" y="65" as="geometry" />
+        </mxCell>
+        <mxCell id="F_GW1" edge="1" parent="PoolGateway" source="GWStart" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="GWTask1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_GW2" edge="1" parent="PoolGateway" source="GWTask1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="GWRouter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_GW3" edge="1" parent="PoolGateway" source="GWRouter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="GWTaskMaps">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PoolMicroservices" parent="1" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=40;fillColor=#f5f5f5;fontStyle=1;fontSize=14;" value="Бэкенд: Микросервисы" vertex="1">
+          <mxGeometry height="380" width="1600" x="-250" y="890" as="geometry" />
+        </mxCell>
+        <mxCell id="LaneSearch" parent="PoolMicroservices" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=30;fillColor=#e1d5e7;" value="Search &amp; Geo Service" vertex="1">
+          <mxGeometry height="120" width="1570" x="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SrvSearchStart" parent="LaneSearch" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Событие&#xa;поиска" vertex="1">
+          <mxGeometry height="86" width="86" x="50" y="17" as="geometry" />
+        </mxCell>
+        <mxCell id="SrvSearchTask1" parent="LaneSearch" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Запрос к внешнему&#xa;геокодеру (координаты)" vertex="1">
+          <mxGeometry height="60" width="120" x="290" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SrvSearchTask2" parent="LaneSearch" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" value="Поиск в PostGIS&#xa;(ST_DWithin)" vertex="1">
+          <mxGeometry height="60" width="120" x="640" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SrvSearchData" parent="LaneSearch" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#ffffff;strokeColor=#000000;size=0.2;" value="Список ID и координат" vertex="1">
+          <mxGeometry height="60" width="100" x="920" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="F_Micro1" edge="1" parent="LaneSearch" source="SrvSearchStart" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SrvSearchTask1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_Micro2" edge="1" parent="LaneSearch" source="SrvSearchTask1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SrvSearchTask2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_Micro3" edge="1" parent="LaneSearch" source="SrvSearchTask2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SrvSearchData">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LaneRatings" parent="PoolMicroservices" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=30;fillColor=#ffe6cc;" value="Ratings Service" vertex="1">
+          <mxGeometry height="120" width="1570" x="30" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="SrvRatingsStart" parent="LaneRatings" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Список ID&#xa;получен" vertex="1">
+          <mxGeometry height="86" width="86" x="650" y="17" as="geometry" />
+        </mxCell>
+        <mxCell id="SrvRatingsTask1" parent="LaneRatings" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Агрегация оценок&#xa;(Redis Cache / ClickHouse)" vertex="1">
+          <mxGeometry height="60" width="140" x="920" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="SrvRatingsData" parent="LaneRatings" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#ffffff;strokeColor=#000000;size=0.2;" value="Рейтинги (JSON)" vertex="1">
+          <mxGeometry height="60" width="100" x="1100" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="F_Rat1" edge="1" parent="LaneRatings" source="SrvRatingsStart" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SrvRatingsTask1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_Rat2" edge="1" parent="LaneRatings" source="SrvRatingsTask1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SrvRatingsData">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LaneVenue" parent="PoolMicroservices" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=30;fillColor=#d5e8d4;" value="Venue (Place) Service" vertex="1">
+          <mxGeometry height="140" width="1570" x="30" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="SrvVenueTask1" parent="LaneVenue" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Сборка карточки&#xa;(Photos, Menu, Desc)" vertex="1">
+          <mxGeometry height="60" width="120" x="900" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SrvVenueTask2" parent="LaneVenue" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" value="Выдача полных&#xa;данных заведения" vertex="1">
+          <mxGeometry height="60" width="120" x="1100" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SrvVenueEnd" parent="LaneVenue" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" value="Ответ&#xa;фронтенду" vertex="1">
+          <mxGeometry height="86" width="86" x="1260" y="27" as="geometry" />
+        </mxCell>
+        <mxCell id="F_Ven1" edge="1" parent="LaneVenue" source="SrvVenueTask1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SrvVenueTask2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_Ven2" edge="1" parent="LaneVenue" source="SrvVenueTask2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="SrvVenueEnd">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="F_Cross1" edge="1" parent="PoolMicroservices" source="SrvSearchData" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SrvRatingsStart" value="Асинхронный вызов (gRPC)">
+          <mxGeometry relative="1" x="-0.0054" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1000" y="100" />
+              <mxPoint x="723" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="F_Cross2" edge="1" parent="PoolMicroservices" source="SrvRatingsData" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SrvVenueTask1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1180" y="260" />
+              <mxPoint x="990" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="PoolExtMaps" parent="1" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=40;fillColor=#f5f5f5;fontStyle=1;fontSize=14;" value="Внешний сервис: Карты (Yandex / 2GIS)" vertex="1">
+          <mxGeometry height="120" width="1600" x="-250" y="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="ExtMapTask1" parent="PoolExtMaps" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Геокодинг (Forward / Reverse)" vertex="1">
+          <mxGeometry height="60" width="120" x="320" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="ExtMapTask2" parent="PoolExtMaps" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="Генерация маршрута (Routing API)" vertex="1">
+          <mxGeometry height="60" width="120" x="1400" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="PoolExtDB" parent="1" style="swimlane;horizontal=0;whiteSpace=wrap;html=1;startSize=40;fillColor=#f5f5f5;fontStyle=1;fontSize=14;" value="Сторонние площадки (Отзывы)" vertex="1">
+          <mxGeometry height="100" width="1600" x="-250" y="1580" as="geometry" />
+        </mxCell>
+        <mxCell id="ExtDBTask1" parent="PoolExtDB" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" value="API интеграция (FLAMP / 2GIS Отзывы)" vertex="1">
+          <mxGeometry height="60" width="140" x="920" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="M_U_FE1" edge="1" parent="1" source="UserTask1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="FEStart" value="Ввод адреса">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint y="290" />
+              <mxPoint x="-161" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="M_U_FE2" edge="1" parent="1" source="UserTask2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="FETask1" value="Запрос фильтров">
+          <mxGeometry relative="1" x="0.2358" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="M_FE_U1" edge="1" parent="1" source="FETask2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="UserTask3" value="Отрисовка карты">
+          <mxGeometry relative="1" x="-0.2703" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="M_U_FE3" edge="1" parent="1" source="UserTask3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="FETask3" value="Выбор заведения">
+          <mxGeometry relative="1" x="-0.2556" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="690" y="144" />
+              <mxPoint x="690" y="290" />
+              <mxPoint x="850" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="M_FE_GW1" edge="1" parent="1" source="FETask1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="GWStart" value="POST">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="250" y="530" />
+              <mxPoint x="-160" y="530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="M_FE_GW2" edge="1" parent="1" source="FETask3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="GWTaskMaps" value="GET">
+          <mxGeometry relative="1" x="0.0686" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="M_GW_Srv1" edge="1" parent="1" source="GWRouter" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="SrvSearchStart" value="Роутинг в Search">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="830" />
+              <mxPoint x="-127" y="830" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="M_Srv_GW1" edge="1" parent="1" source="SrvVenueEnd" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="GWTask1" value="Ответ (JSON)">
+          <mxGeometry relative="1" x="-0.3215" y="-2" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1060" y="1182" />
+              <mxPoint x="1060" y="800" />
+              <mxPoint x="350" y="800" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="M_GW_FE1" edge="1" parent="1" source="GWTask1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" target="FETask2" value="Результаты поиска">
+          <mxGeometry relative="1" x="0.4604" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="350" y="620" />
+              <mxPoint x="550" y="620" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="M_Srv_Ext1" edge="1" parent="1" source="SrvSearchTask1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="ExtMapTask1" value="REST /geocode">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="M_Srv_Ext2" edge="1" parent="1" source="GWTaskMaps" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="ExtMapTask2" value="REST /routing">
+          <mxGeometry relative="1" x="0.7828" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="850" y="720" />
+              <mxPoint x="1220" y="720" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="M_Srv_ExtDB" edge="1" parent="1" source="SrvVenueTask1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;endArrow=open;endFill=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="ExtDBTask1" value="Запрос отзывов">
+          <mxGeometry relative="1" x="0.2" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="740" y="1230" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

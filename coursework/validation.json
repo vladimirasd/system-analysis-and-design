@@ -1,0 +1,35 @@
+{
+  "pdf_pages": 28,
+  "requirements": 56,
+  "detailed_use_cases": [
+    "UC-01",
+    "UC-03",
+    "UC-04"
+  ],
+  "stakeholders": 19,
+  "main_business_requirements": [
+    "BR-01",
+    "BR-02",
+    "BR-04"
+  ],
+  "pdf_page_sizes": [
+    [
+      595,
+      842
+    ],
+    [
+      1191,
+      842
+    ]
+  ],
+  "note": "Checks concern documents and diagram structure; no application implementation is claimed.",
+  "checks": [
+    "BPMN: unique IDs, resolved references, sequence flow within process, message flow between participants, reachability of all nodes, end paths, named XOR branches",
+    "Drawio: resolved graph references; UML: 15 use cases, 4 include, 2 extend",
+    "PlantUML source agrees on actors, cases and relationships",
+    "Word: readable OOXML, two embedded diagrams, required chapter and requirement markers",
+    "Archive: original user diagram preserved byte-for-byte, four editable completed diagram sources included",
+    "Markdown: all local links and image references resolve",
+    "PDF: no empty pages or text outside page boundaries; Cyrillic text extraction succeeds"
+  ]
+}
